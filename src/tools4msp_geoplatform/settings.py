@@ -419,3 +419,50 @@ if GMAPS_TOKEN:
 # WAGTAILADMIN_BASE_URL = 'http://example.com'
 #
 # WAGTAILDOCS_EXTENSIONS = ['csv', 'docx', 'key', 'odt', 'pdf', 'pptx', 'rtf', 'txt', 'xlsx', 'zip']
+
+
+#####
+## django-cms minimal integration
+#####
+
+# the django-cms admin needs to come before the django admin
+INSTALLED_APPS = (
+    "djangocms_admin_style",
+) + INSTALLED_APPS + (
+    # django.contrib.sites is already enabled by geonode
+    "cms",
+    "menus",
+    "sekizai",
+    # "treebeard", this is already used by geonode
+    "djangocms_versioning",
+    "djangocms_alias",
+)
+
+# SITE_ID is already defined by geonode
+# LANGUAGES is already defined by geonode
+CMS_CONFIRM_VERSION4 = True
+
+TEMPLATES[0]["OPTIONS"]["context_processors"].extend(
+    [
+        # django.template.context_processors.i18n is already enabled by geonode
+        "sekizai.context_processors.sekizai",
+        "cms.context_processors.cms_settings",
+    ]
+)
+
+# GeoNode already adds the LocaleMiddleware
+MIDDLEWARE = (
+    "cms.middleware.utils.ApphookReloadMiddleware",
+) + MIDDLEWARE + (
+    "cms.middleware.user.CurrentUserMiddleware",
+    "cms.middleware.page.CurrentPageMiddleware",
+    "cms.middleware.toolbar.ToolbarMiddleware",
+    "cms.middleware.language.LanguageCookieMiddleware",
+)
+
+# X_FRAME_OPTIONS already defined by geonode
+
+CMS_TEMPLATES = [
+    ("homepage.html", "Homepage"),
+    ("page.html", "Standard page"),
+]

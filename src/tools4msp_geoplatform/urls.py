@@ -49,7 +49,9 @@ urlpatterns = [
 
     # Needed to migrate data from old platform
     path('', include('tools4msp_geoplatform.upmigrate.urls')),
-] + geonode_urlpatterns
+] + geonode_urlpatterns + [
+    path("", include("cms.urls")),
+]
 
 homepage = register_url_event()(HomePageView.as_view())
 
